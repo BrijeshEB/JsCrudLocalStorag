@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+<style type="text/css">
+*{box-sizing: border-box;font-family: Arial;}
+
+table,td,th{border:solid 1px #333333;text-align: center;font-family: monospace;font-size: 18px;border-collapse: collapse;padding: 8px;text-transform: capitalize;}
+
+input{padding: 5px;font-family: Arial;font-size: 16px;width: 100%;margin-bottom: 10px;}
+form button{padding: 5px;font-family: Arial;font-size: 16px;width: 49%;margin-bottom: 10px;}
+
+fieldset{width: 100%;max-width:340px;margin-right: 10px;margin: 0px auto;}
+table{width: 100%;max-width: 500px;margin-right: 10px;margin: 0px auto;}
+
+</style>
+</head>
+<body>
+
+<fieldset>
+	<legend>Enter Data</legend>
+	<form autocomplete="off">
+		<input type="text" id="name" name="" placeholder="Enter Employee Name">
+		<input type="text" id="salary" name="" placeholder="Enter Salary">
+		<button type="submit" onclick="storeData()">Save Data</button>
+		<button type="submit" onclick="flushAllData()">Delete Data</button>
+	</form>
+</fieldset>
+<br>
+<br>
+<table style="margin-top: 8px">
+	<thead>
+		<tr>
+			<th>Employee</th>
+			<th>Salary</th>
+			<th>Operations</th>
+		</tr>
+	</thead>
+	<tbody id="showData"></tbody>
+</table>
+
+<script type="text/javascript">	
+
+	function flushAllData(){
+		localStorage.clear();
+		location.reload();
+	}
+
+	function storeData(){
+		let myName = document.getElementById('name').value;
+		let mySalary = document.getElementById('salary').value;
+			
+		if (myName && mySalary) {
+			localStorage.setItem(myName,mySalary);
+		}else{
+			alert('Please Insert Some Data');
+		}
+		location.reload();
+	}
+
+	for (let i=0; i<localStorage.length; i++) {
+		let viewData = document.getElementById('showData');		
+		let myKey = localStorage.key(i);
+		let myVal = localStorage.getItem(myKey);
+		viewData.innerHTML += 
+		`<tr>
+			<td>${myKey}</td>
+			<td>${myVal}</td>
+			<td>
+				<button id="editCurrentData" onclick="editCurrent('${myKey}')">Edit</button>
+				<button id="deleteCurrentData" onclick="deleteCurrent('${myKey}')">Delete</button>
+			</td>
+		</tr>`;
+	}
+
+	function editCurrent(vals){
+		document.getElementById('name').value = vals;
+		document.getElementById('salary').value = localStorage.getItem(vals);
+	}
+
+	function deleteCurrent(vals){
+		localStorage.removeItem(vals);
+		location.reload();
+	}
+
+
+	// localStorage.setItem('Name','Ruchi');
+	// localStorage.removeItem('Sir');
+	console.log(localStorage);
+
+
+</script>
+</body>
+</html>
